@@ -299,7 +299,7 @@ class Schema(object):
             if document._location == location:
                 return document
 
-    def _get_schema_documents(self, namespace, fail_silently=False):
+    def _get_schema_documents(self, namespace, fail_silently=True):
         """Return a list of SchemaDocument's for the given namespace.
 
         :rtype: list of SchemaDocument
