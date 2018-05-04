@@ -6,7 +6,7 @@ from lxml import etree
 from zeep import exceptions
 from zeep import ns
 from zeep.xsd.elements import builtins as xsd_builtins_elements
-from zeep.xsd.types import builtins as xsd_builtins_types
+from zeep.xsd.types import builtins as xsd_builtins_types, any
 from zeep.xsd.visitor import SchemaVisitor
 
 logger = logging.getLogger(__name__)
@@ -220,7 +220,7 @@ class Schema(object):
         return schema
 
     def _get_instance(self, qname, method_name, name):
-        """Return an object from one of the SchemaDocument's"""
+        """Return an object from one of the SchemaDocuments"""
         qname = self._create_qname(qname)
         try:
             last_exception = None
@@ -231,7 +231,11 @@ class Schema(object):
                 except exceptions.LookupError as exc:
                     last_exception = exc
                     continue
-            raise last_exception
+
+            if last_exception is not None:
+                raise last_exception
+            else:
+                return any.AnyType
 
         except exceptions.NamespaceError:
             raise exceptions.NamespaceError((
